@@ -54,17 +54,22 @@ const NavButton: React.FC<{ item: { id: Page, icon: React.FC<IconProps> }, activ
 
 
 const Sidebar: React.FC<SidebarProps> = ({ activePage, setActivePage, isOpen, setIsOpen }) => {
+  const handleNavClick = (page: Page) => {
+    setActivePage(page);
+    setIsOpen(false);
+  };
+  
   return (
     <>
       <div className={`fixed inset-0 bg-black/60 z-40 lg:hidden transition-opacity ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`} onClick={() => setIsOpen(false)} aria-hidden="true"></div>
       <aside className={`fixed lg:relative inset-y-0 left-0 z-50 w-64 bg-brand-bg border-r border-brand-border flex-col p-4 transform transition-transform duration-300 ease-in-out lg:translate-x-0 ${isOpen ? 'translate-x-0 flex' : '-translate-x-full hidden lg:flex'}`}>
         <nav className="flex-1 space-y-2">
             <ul className="space-y-1">
-                {navItems.map((item) => <li key={item.id}><NavButton item={item} activePage={activePage} onClick={() => setActivePage(item.id)} /></li>)}
+                {navItems.map((item) => <li key={item.id}><NavButton item={item} activePage={activePage} onClick={() => handleNavClick(item.id)} /></li>)}
             </ul>
         </nav>
         <div className="mt-auto">
-            <NavButton item={{ id: Page.Settings, icon: SettingsIcon }} activePage={activePage} onClick={() => setActivePage(Page.Settings)} />
+            <NavButton item={{ id: Page.Settings, icon: SettingsIcon }} activePage={activePage} onClick={() => handleNavClick(Page.Settings)} />
         </div>
       </aside>
     </>
