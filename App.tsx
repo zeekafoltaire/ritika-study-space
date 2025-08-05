@@ -1,6 +1,7 @@
 
 
 
+
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
@@ -330,10 +331,13 @@ const App: React.FC = () => {
         switch (activePage) {
             case Page.Dashboard:
                 return <Dashboard
-                    tasks={tasks} 
-                    timeLeft={timeLeft} 
-                    isTimerActive={isTimerActive} 
-                    timerMode={timerMode} 
+                    tasks={tasks}
+                    onToggleTask={handleToggleTask}
+                    timeLeft={timeLeft}
+                    isTimerActive={isTimerActive}
+                    timerMode={timerMode}
+                    onStartTimer={handleStartTimer}
+                    onPauseTimer={handlePauseTimer}
                     onStartChallenge={() => setActivePage(Page.DailyChallenge)}
                 />;
             case Page.TodoList:

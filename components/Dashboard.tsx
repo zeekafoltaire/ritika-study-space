@@ -13,6 +13,8 @@ const CheckCircleIcon = ({className}:{className?:string}) => <svg className={cla
 const TimerIcon = ({className}:{className?:string}) => <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>;
 const QuoteIcon = ({className}:{className?:string}) => <svg className={className} viewBox="0 0 24 24" fill="currentColor"><path d="M6 17h3l2-4V7H5v6h3l-2 4zm8 0h3l2-4V7h-6v6h3l-2 4z"/></svg>;
 const DailyChallengeIcon = ({className}:{className?:string}) => <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M10 2a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 2zM10 15a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 15zM10 7a3 3 0 100 6 3 3 0 000-6z" /><path fillRule="evenodd" d="M16.732 5.232a.75.75 0 011.06 1.06l-1.5 1.5a.75.75 0 01-1.06-1.06l1.5-1.5zM5.232 16.732a.75.75 0 011.06-1.06l-1.5-1.5a.75.75 0 01-1.06 1.06l1.5 1.5zM18 10a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5a.75.75 0 01.75.75zM4.75 10a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5a.75.75 0 01.75.75zM16.732 14.768a.75.75 0 01-1.06 1.06l-1.5-1.5a.75.75 0 111.06-1.06l1.5 1.5zM6.292 6.292a.75.75 0 01-1.06-1.06l1.5-1.5a.75.75 0 011.06 1.06l-1.5 1.5z" clipRule="evenodd" /></svg>;
+const PlayIcon = ({className}:{className?:string}) => <svg className={className} viewBox="0 0 20 20" fill="currentColor"><path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z" /></svg>;
+const PauseIcon = ({className}:{className?:string}) => <svg className={className} viewBox="0 0 20 20" fill="currentColor"><path d="M5.75 4.5a.75.75 0 00-.75.75v9.5c0 .414.336.75.75.75h1.5a.75.75 0 00.75-.75V5.25a.75.75 0 00-.75-.75H5.75zm8.5 0a.75.75 0 00-.75.75v9.5c0 .414.336.75.75.75h1.5a.75.75 0 00.75-.75V5.25a.75.75 0 00-.75-.75h-1.5z" /></svg>;
 
 // --- WIDGET COMPONENTS ---
 
@@ -31,16 +33,20 @@ const Welcome: React.FC = () => {
     );
 };
 
-const TodaysTasks: React.FC<{ tasks: Task[] }> = ({ tasks }) => {
+const TodaysTasks: React.FC<{ tasks: Task[], onToggleTask: (id: number, completed: boolean) => void }> = ({ tasks, onToggleTask }) => {
     return (
         <div className="bg-brand-surface border border-brand-border rounded-xl p-5">
             <h3 className="font-semibold text-brand-text-primary mb-3">Today's Tasks</h3>
             <ul className="space-y-3">
                 {tasks.slice(0, 4).map(task => (
-                    <li key={task.id} className="flex items-center gap-3">
+                    <li
+                      key={task.id}
+                      className="flex items-center gap-3 cursor-pointer group rounded-md -mx-2 px-2 py-1 transition-colors hover:bg-brand-surface-light"
+                      onClick={() => onToggleTask(task.id, !task.completed)}
+                    >
                         {task.completed
                             ? <CheckCircleIcon className="w-5 h-5 text-brand-primary"/>
-                            : <div className="w-5 h-5 rounded-full border-2 border-brand-secondary"></div>
+                            : <div className="w-5 h-5 rounded-full border-2 border-brand-secondary group-hover:border-brand-primary transition-colors"></div>
                         }
                         <span className={`flex-1 ${task.completed ? 'line-through text-brand-text-secondary' : 'text-brand-text-primary'}`}>{task.text}</span>
                     </li>
@@ -55,6 +61,8 @@ interface TimerWidgetProps {
     timeLeft: number;
     isTimerActive: boolean;
     timerMode: 'work' | 'break';
+    onStartTimer: () => void;
+    onPauseTimer: () => void;
 }
 
 const formatTime = (seconds: number) => {
@@ -67,18 +75,27 @@ const formatTime = (seconds: number) => {
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
 };
 
-const TimerWidget: React.FC<TimerWidgetProps> = ({ timeLeft, isTimerActive, timerMode }) => {
+const TimerWidget: React.FC<TimerWidgetProps> = ({ timeLeft, isTimerActive, timerMode, onStartTimer, onPauseTimer }) => {
     const statusText = isTimerActive ? (timerMode === 'work' ? "Focusing..." : "On a break...") : "Paused";
     return (
-        <div className="bg-brand-surface border border-brand-border rounded-xl p-5">
-            <h3 className="font-semibold text-brand-text-primary mb-3">Maalkin's Timer</h3>
-            <div className="flex flex-col items-center">
-                <div className="flex items-center gap-2">
-                    <TimerIcon className="w-6 h-6 text-brand-primary" />
-                    <span className="text-3xl font-mono font-bold text-white">{formatTime(timeLeft)}</span>
+        <div className="bg-brand-surface border border-brand-border rounded-xl p-5 flex flex-col justify-between h-full">
+            <div>
+                <h3 className="font-semibold text-brand-text-primary mb-3">Maalkin's Timer</h3>
+                <div className="flex flex-col items-center">
+                    <div className="flex items-center gap-2">
+                        <TimerIcon className="w-6 h-6 text-brand-primary" />
+                        <span className="text-3xl font-mono font-bold text-white">{formatTime(timeLeft)}</span>
+                    </div>
+                    <p className="text-sm text-brand-text-secondary mt-1">{statusText}</p>
                 </div>
-                <p className="text-sm text-brand-text-secondary mt-1">{statusText}</p>
             </div>
+            <button
+                onClick={isTimerActive ? onPauseTimer : onStartTimer}
+                className="w-full mt-4 py-2 bg-brand-surface-light text-brand-text-primary font-semibold rounded-lg hover:bg-brand-primary hover:text-black transition-colors flex items-center justify-center gap-2"
+            >
+                {isTimerActive ? <PauseIcon className="w-5 h-5"/> : <PlayIcon className="w-5 h-5"/>}
+                <span>{isTimerActive ? 'Pause' : 'Start'}</span>
+            </button>
         </div>
     )
 };
@@ -129,18 +146,24 @@ const DailyChallengeWidget: React.FC<{onStart: () => void}> = ({ onStart }) => {
 // --- MAIN DASHBOARD COMPONENT ---
 interface DashboardProps {
     tasks: Task[];
+    onToggleTask: (id: number, completed: boolean) => Promise<void>;
     // Timer props
     timeLeft: number;
     isTimerActive: boolean;
     timerMode: 'work' | 'break';
+    onStartTimer: () => void;
+    onPauseTimer: () => void;
     onStartChallenge: () => void;
 }
 
 const Dashboard: React.FC<DashboardProps> = ({ 
-    tasks, 
+    tasks,
+    onToggleTask,
     timeLeft, 
     isTimerActive, 
     timerMode,
+    onStartTimer,
+    onPauseTimer,
     onStartChallenge,
 }) => {
   return (
@@ -148,8 +171,14 @@ const Dashboard: React.FC<DashboardProps> = ({
         <div className="space-y-6">
             <Welcome />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <TodaysTasks tasks={tasks} />
-                <TimerWidget timeLeft={timeLeft} isTimerActive={isTimerActive} timerMode={timerMode} />
+                <TodaysTasks tasks={tasks} onToggleTask={onToggleTask} />
+                <TimerWidget
+                    timeLeft={timeLeft}
+                    isTimerActive={isTimerActive}
+                    timerMode={timerMode}
+                    onStartTimer={onStartTimer}
+                    onPauseTimer={onPauseTimer}
+                />
             </div>
              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <DailyChallengeWidget onStart={onStartChallenge} />
