@@ -2,6 +2,8 @@
 
 
 
+
+
 import React, { useState, useEffect, useRef } from 'react';
 import { Task } from '../types';
 import { quotes } from '../data/quotes';
@@ -10,7 +12,7 @@ import { quotes } from '../data/quotes';
 const CheckCircleIcon = ({className}:{className?:string}) => <svg className={className} viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg>;
 const TimerIcon = ({className}:{className?:string}) => <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>;
 const QuoteIcon = ({className}:{className?:string}) => <svg className={className} viewBox="0 0 24 24" fill="currentColor"><path d="M6 17h3l2-4V7H5v6h3l-2 4zm8 0h3l2-4V7h-6v6h3l-2 4z"/></svg>;
-
+const DailyChallengeIcon = ({className}:{className?:string}) => <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M10 2a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 2zM10 15a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 15zM10 7a3 3 0 100 6 3 3 0 000-6z" /><path fillRule="evenodd" d="M16.732 5.232a.75.75 0 011.06 1.06l-1.5 1.5a.75.75 0 01-1.06-1.06l1.5-1.5zM5.232 16.732a.75.75 0 011.06-1.06l-1.5-1.5a.75.75 0 01-1.06 1.06l1.5 1.5zM18 10a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5a.75.75 0 01.75.75zM4.75 10a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5a.75.75 0 01.75.75zM16.732 14.768a.75.75 0 01-1.06 1.06l-1.5-1.5a.75.75 0 111.06-1.06l1.5 1.5zM6.292 6.292a.75.75 0 01-1.06-1.06l1.5-1.5a.75.75 0 011.06 1.06l-1.5 1.5z" clipRule="evenodd" /></svg>;
 
 // --- WIDGET COMPONENTS ---
 
@@ -107,6 +109,22 @@ const QuoteOfTheDay: React.FC = () => {
     );
 };
 
+const DailyChallengeWidget: React.FC<{onStart: () => void}> = ({ onStart }) => {
+    return (
+        <div className="bg-gradient-to-br from-brand-primary/20 to-brand-surface border border-brand-primary/50 rounded-xl p-5 flex flex-col items-center justify-center text-center col-span-1 md:col-span-2 shadow-lg">
+            <DailyChallengeIcon className="w-12 h-12 text-brand-primary" />
+            <h3 className="font-bold text-xl text-brand-text-primary mt-3">Daily IIT Challenge</h3>
+            <p className="text-sm text-brand-text-secondary mt-1 mb-4 max-w-md">Test your knowledge with 10 questions from past JEE papers. A new challenge awaits every day!</p>
+            <button
+                onClick={onStart}
+                className="bg-brand-primary text-black font-bold py-2 px-6 rounded-lg hover:bg-brand-primary-hover transition-all transform hover:scale-105"
+            >
+                Start Today's Challenge
+            </button>
+        </div>
+    );
+};
+
 
 // --- MAIN DASHBOARD COMPONENT ---
 interface DashboardProps {
@@ -115,6 +133,7 @@ interface DashboardProps {
     timeLeft: number;
     isTimerActive: boolean;
     timerMode: 'work' | 'break';
+    onStartChallenge: () => void;
 }
 
 const Dashboard: React.FC<DashboardProps> = ({ 
@@ -122,6 +141,7 @@ const Dashboard: React.FC<DashboardProps> = ({
     timeLeft, 
     isTimerActive, 
     timerMode,
+    onStartChallenge,
 }) => {
   return (
     <div className="p-6">
@@ -131,6 +151,9 @@ const Dashboard: React.FC<DashboardProps> = ({
                 <TodaysTasks tasks={tasks} />
                 <TimerWidget timeLeft={timeLeft} isTimerActive={isTimerActive} timerMode={timerMode} />
             </div>
+             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <DailyChallengeWidget onStart={onStartChallenge} />
+             </div>
              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <QuoteOfTheDay />
              </div>

@@ -1,5 +1,6 @@
 
 
+
 import React from 'react';
 import { Page } from '../types';
 
@@ -16,6 +17,7 @@ const ProblemSolverIcon: React.FC<IconProps> = ({ className }) => (<svg classNam
 const CalculatorIcon: React.FC<IconProps> = ({ className }) => (<svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM7 12h2m-2 4h2m4-4h2m-2 4h2m4-4h2m-2 4h2M5 10h14v10H5V10z" /></svg>);
 const UnitConverterIcon: React.FC<IconProps> = ({ className }) => (<svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" /></svg>);
 const EquationBalancerIcon: React.FC<IconProps> = ({ className }) => (<svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l-6-2m0 0l-3 9" /></svg>);
+const DailyChallengeIcon: React.FC<IconProps> = ({ className }) => (<svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>);
 
 
 const navItems = [
@@ -23,6 +25,7 @@ const navItems = [
     { id: Page.TodoList, icon: TodoIcon },
     { id: Page.SubjectNotes, icon: NotesIcon },
     { id: Page.ProblemSolver, icon: ProblemSolverIcon },
+    { id: Page.DailyChallenge, icon: DailyChallengeIcon },
     { id: Page.ExamTracker, icon: ExamIcon },
     { id: Page.PomodoroTimer, icon: TimerIcon },
     { id: Page.PeriodicTable, icon: PeriodicTableIcon },

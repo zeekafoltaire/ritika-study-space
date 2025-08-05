@@ -1,5 +1,6 @@
 
 
+
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
@@ -17,6 +18,8 @@ import ProblemView from './components/ProblemView';
 import Calculator from './components/Calculator';
 import UnitConverter from './components/UnitConverter';
 import EquationBalancer from './components/EquationBalancer';
+import DailyChallenge from './components/DailyChallenge';
+
 
 import { Page, Task, Exam, Doubt, Subject, Profile, Problem, ChatMessage } from './types';
 import { getCollection, addDocument, updateDocument, deleteDocument } from './services/supabaseService';
@@ -331,6 +334,7 @@ const App: React.FC = () => {
                     timeLeft={timeLeft} 
                     isTimerActive={isTimerActive} 
                     timerMode={timerMode} 
+                    onStartChallenge={() => setActivePage(Page.DailyChallenge)}
                 />;
             case Page.TodoList:
                 return <div className="p-4 md:p-6"><TaskList tasks={tasks} onAddTask={handleAddTask} onToggleTask={handleToggleTask} onDeleteTask={handleDeleteTask} /></div>;
@@ -375,6 +379,8 @@ const App: React.FC = () => {
                        )}
                     </div>
                 );
+            case Page.DailyChallenge:
+                return <div className="p-4 md:p-6"><DailyChallenge onBackToDashboard={() => setActivePage(Page.Dashboard)} /></div>;
             case Page.PeriodicTable:
                 return <div className="p-4 md:p-6"><PeriodicTable /></div>;
             case Page.Calculator:

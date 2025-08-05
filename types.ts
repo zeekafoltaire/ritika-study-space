@@ -1,10 +1,12 @@
 
 
+
 export enum Page {
     Dashboard = 'Dashboard',
     TodoList = 'To-Do List',
     SubjectNotes = 'Subject Notes',
     ProblemSolver = 'Problem Solver',
+    DailyChallenge = 'Daily Challenge',
     ExamTracker = 'Exam Tracker',
     PomodoroTimer = "Maalkin's Timer",
     PeriodicTable = 'Periodic Table',
@@ -92,6 +94,32 @@ export interface Formula {
   formula_text: string;
   description: string;
 }
+
+// For Daily Challenge
+export interface QuizQuestion {
+    subject: string;
+    topic: string;
+    questionText: string;
+    options: {
+        A: string;
+        B: string;
+        C: string;
+        D: string;
+    };
+    correctOption: 'A' | 'B' | 'C' | 'D';
+    detailedExplanation: string;
+}
+
+export interface Quiz {
+    title: string;
+    questions: QuizQuestion[];
+}
+
+export interface UserAnswer {
+    questionIndex: number;
+    selectedOption: 'A' | 'B' | 'C' | 'D' | null;
+}
+
 
 export type Database = {
   public: {
